@@ -52,6 +52,21 @@ const todosData = [
 
 function App() {
   const [todos, setTodo] = useState(todosData);
+  const [todoText, setTodoText] = useState("");
+  const [priority, setPriority] = useState(0);
+
+  const addTodo = () => {
+    if (todoText === "" || priority <= 0) return;
+    const newTodo = {
+      id: todos.length + 1,
+      text: todoText,
+      priority: priority,
+    };
+    todos.push(newTodo);
+    setTodo([...todos]);
+    setTodoText("");
+    setPriority((currentValue) => 0);
+  };
 
   return (
     <>
@@ -69,10 +84,13 @@ function App() {
               <CCol md>
                 <CFormFloating className="mb-3">
                   <CFormInput
+                    invalid={todoText.length <= 0}
+                    valid={todoText.length > 0}
                     type="text"
                     id="todoText"
                     placeholder="Buy some coffee"
-                    valid
+                    onChange={(e) => setTodoText(e.target.value)}
+                    value={todoText}
                   />
                   <CFormLabel htmlFor="todoText" style={{ marginLeft: "10px" }}>
                     Todo Details
@@ -82,10 +100,13 @@ function App() {
               <CCol md>
                 <CFormFloating>
                   <CFormInput
+                    invalid={priority <= 0}
+                    valid={priority !== 0}
                     type="number"
                     id="priority"
                     placeholder="Priority"
-                    invalid
+                    onChange={(e) => setPriority(e.target.value)}
+                    value={priority}
                   />
                   <CFormLabel htmlFor="priority" style={{ marginLeft: "10px" }}>
                     Priority
@@ -94,7 +115,9 @@ function App() {
               </CCol>
               <CCol md>
                 <div className="d-grid mt-3">
-                  <CButton color="success">ADD</CButton>
+                  <CButton color="success" onClick={addTodo}>
+                    ADD
+                  </CButton>
                 </div>
               </CCol>
             </CCardBody>
@@ -103,7 +126,14 @@ function App() {
         <div className="row justify-content-md-center">
           <CCard style={{ maxWidth: "50%" }} className="mb-3">
             <CCardBody>
-              <CCol md>
+              <CCol
+                md
+                style={{
+                  maxHeight: "500px",
+                  scrollBehavior: "smooth",
+                  overflowY: "scroll",
+                }}
+              >
                 <CListGroup>
                   {todos.map((todo) => {
                     return (
