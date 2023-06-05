@@ -129,7 +129,7 @@ function App() {
               <CCol
                 md
                 style={{
-                  maxHeight: "500px",
+                  maxHeight: "300px",
                   scrollBehavior: "smooth",
                   overflowY: "scroll",
                 }}
